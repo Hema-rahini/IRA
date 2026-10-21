@@ -1,0 +1,55 @@
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+
+# IDE & Editor Files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Python Virtual Environments & Cache
+venv/
+.venv/
+env/
+*/venv/
+*/.venv/
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*.class
+*.pyc
+
+# Heavy Media Files (host videos on external CDN/storage)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.zip
+*.tar.gz
+
+# Flutter / Dart Build & Tooling
+.dart_tool/
+*/.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*/build/
+/android/app/debug
+/android/app/profile
+/android/app/release
+.gradle/
+*/.gradle/
+*.apk
+*.aab
+
+# Local Database Files & Credentials
+*.db
+*.sqlite3
+local_settings.py
