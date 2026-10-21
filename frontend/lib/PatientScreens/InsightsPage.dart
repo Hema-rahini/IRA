@@ -137,6 +137,12 @@ class _InsightsState extends State<Insights> {
 
   @override
   Widget build(BuildContext context) {
+    final double maxSentiment = (score1 > score2 ? score1 : score2);
+    final double sentimentMaxY = maxSentiment > 0 ? (maxSentiment + 2) : 5.0;
+
+    final double maxMood = _horizontalChartData.fold(0.0, (prev, elem) => elem.y1 > prev ? elem.y1 : prev);
+    final double moodMaxY = maxMood > 0 ? (maxMood + 2) : 5.0;
+
     return Scaffold(
       backgroundColor: AppColors.patientBackground,
       appBar: AppBar(
@@ -191,10 +197,11 @@ class _InsightsState extends State<Insights> {
                               BarChartData(
                                 alignment: BarChartAlignment.spaceAround,
                                 borderData: FlBorderData(show: false),
+                                maxY: sentimentMaxY,
                                 gridData: FlGridData(
                                   show: true,
                                   drawVerticalLine: false,
-                                  horizontalInterval: 5,
+                                  horizontalInterval: (sentimentMaxY <= 5 ? 1 : (sentimentMaxY / 5).ceilToDouble()),
                                   getDrawingHorizontalLine: (value) => FlLine(
                                     color: AppColors.borderSubtle,
                                     strokeWidth: 1,
@@ -203,10 +210,17 @@ class _InsightsState extends State<Insights> {
                                 titlesData: FlTitlesData(
                                   topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                                   rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  leftTitles: const AxisTitles(
+                                  leftTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 28,
+                                      interval: (sentimentMaxY <= 5 ? 1 : (sentimentMaxY / 5).ceilToDouble()),
+                                      getTitlesWidget: (value, meta) {
+                                        return Text(
+                                          value.toInt().toString(),
+                                          style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                                        );
+                                      },
                                     ),
                                   ),
                                   bottomTitles: AxisTitles(
@@ -265,6 +279,29 @@ class _InsightsState extends State<Insights> {
                               _buildLegendItem('Positive (${positiveCount})', AppColors.positiveGreen),
                             ],
                           ),
+                          if (score1 == 0 && score2 == 0) ...[
+                            const SizedBox(height: 16),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: AppColors.patientPrimary.withValues(alpha: 0.07),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.patientPrimary.withValues(alpha: 0.18)),
+                              ),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.tips_and_updates_outlined, size: 18, color: AppColors.patientPrimary),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'No journal reflections yet. Share your thoughts in the Daily Journal to see your AI sentiment ratio!',
+                                      style: TextStyle(fontSize: 12, color: AppColors.textPrimary, height: 1.3),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
@@ -308,10 +345,11 @@ class _InsightsState extends State<Insights> {
                               BarChartData(
                                 alignment: BarChartAlignment.spaceAround,
                                 borderData: FlBorderData(show: false),
+                                maxY: moodMaxY,
                                 gridData: FlGridData(
                                   show: true,
                                   drawVerticalLine: false,
-                                  horizontalInterval: 2,
+                                  horizontalInterval: (moodMaxY <= 5 ? 1 : (moodMaxY / 5).ceilToDouble()),
                                   getDrawingHorizontalLine: (value) => FlLine(
                                     color: AppColors.borderSubtle,
                                     strokeWidth: 1,
@@ -320,7 +358,19 @@ class _InsightsState extends State<Insights> {
                                 titlesData: FlTitlesData(
                                   topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                                   rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 26)),
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 26,
+                                      interval: (moodMaxY <= 5 ? 1 : (moodMaxY / 5).ceilToDouble()),
+                                      getTitlesWidget: (value, meta) {
+                                        return Text(
+                                          value.toInt().toString(),
+                                          style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                   bottomTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
@@ -357,6 +407,29 @@ class _InsightsState extends State<Insights> {
                               ),
                             ),
                           ),
+                          if (maxMood == 0) ...[
+                            const SizedBox(height: 16),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: AppColors.patientWarmAccent.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.patientWarmAccent.withValues(alpha: 0.20)),
+                              ),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.sentiment_satisfied_alt_rounded, size: 18, color: AppColors.patientWarmAccent),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'No emotion logs recorded yet. Complete today\'s therapy activities to track your feelings here!',
+                                      style: TextStyle(fontSize: 12, color: AppColors.textPrimary, height: 1.3),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),

@@ -896,6 +896,65 @@ def fetch_thoughts():
         return jsonify({'error': str(e)}), 500
 
 
+#--------------------------- Thought Sentiment Analytics -------------------------
+@app.route('/check_thoughts_count', methods=['GET', 'POST'])
+def check_thoughts_count():
+    try:
+        data = request.get_json(silent=True) or {}
+        email = data.get('email') or data.get('Email_ID') or request.args.get('email')
+
+        if not email:
+            return jsonify({'NEGATIVE': 0, 'POSITIVE': 0, 'error': 'Email is required'}), 200
+
+        # Query counts grouped by Output (POSITIVE / NEGATIVE)
+        thoughts_counts = db.session.query(Thoughts.Output, func.count().label('count')) \
+            .filter(func.lower(Thoughts.Email_ID) == email.lower()) \
+            .group_by(Thoughts.Output) \
+            .all()
+
+        thoughts_count_dict = {str(entry[0]).upper(): int(entry[1]) for entry in thoughts_counts if entry[0]}
+        thoughts_count_dict.setdefault('NEGATIVE', 0)
+        thoughts_count_dict.setdefault('POSITIVE', 0)
+
+        # Sync counts to the Score table
+        score_entry = Score.query.filter(func.lower(Score.email) == email.lower()).first()
+        if score_entry:
+            score_entry.negativecount = thoughts_count_dict['NEGATIVE']
+            score_entry.positivecount = thoughts_count_dict['POSITIVE']
+            db.session.commit()
+
+        return jsonify(thoughts_count_dict), 200
+
+    except Exception as e:
+        print(f"Error in check_thoughts_count: {e}")
+        return jsonify({'NEGATIVE': 0, 'POSITIVE': 0, 'error': str(e)}), 200
+
+
+@app.route('/thoughts_count', methods=['GET', 'POST'])
+def thoughts_count():
+    try:
+        data = request.get_json(silent=True) or {}
+        email = data.get('email') or data.get('Email_ID') or request.args.get('email')
+
+        if not email:
+            return jsonify({'NEGATIVE': 0, 'POSITIVE': 0}), 200
+
+        thoughts_counts = db.session.query(Thoughts.Output, func.count().label('count')) \
+            .filter(func.lower(Thoughts.Email_ID) == email.lower()) \
+            .group_by(Thoughts.Output) \
+            .all()
+
+        thoughts_count_dict = {str(entry[0]).upper(): int(entry[1]) for entry in thoughts_counts if entry[0]}
+        thoughts_count_dict.setdefault('NEGATIVE', 0)
+        thoughts_count_dict.setdefault('POSITIVE', 0)
+
+        return jsonify(thoughts_count_dict), 200
+
+    except Exception as e:
+        print(f"Error in thoughts_count: {e}")
+        return jsonify({'NEGATIVE': 0, 'POSITIVE': 0, 'error': str(e)}), 200
+
+
 @app.route('/get_details_with_images', methods=['GET'])
 def get_details_with_images():
     try:
@@ -1387,6 +1446,56 @@ def update_activity():
         db.session.rollback()
         print(f"Error in update_activity: {e}")
         return jsonify({'error': str(e)}), 500
+
+
+#--------------------------- Mood Frequency Analytics -------------------------
+@app.route('/mood_count', methods=['GET', 'POST'])
+def mood_count():
+    try:
+        data = request.get_json(silent=True) or {}
+        email = data.get('email') or data.get('Email_ID') or request.args.get('email')
+
+        moods = ["joyful", "happy", "amazed", "depression", "chill", "miserable", "furious", "irritated", "manic", "calm"]
+
+        if not email:
+            return jsonify({m: 0 for m in moods}), 200
+
+        score_entry = Score.query.filter(func.lower(Score.email) == email.lower()).first()
+        if score_entry:
+            result = {m: (getattr(score_entry, m, 0) or 0) for m in moods}
+        else:
+            result = {m: 0 for m in moods}
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        print(f"Error in mood_count: {e}")
+        moods = ["joyful", "happy", "amazed", "depression", "chill", "miserable", "furious", "irritated", "manic", "calm"]
+        return jsonify({m: 0 for m in moods}), 200
+
+
+@app.route('/most_mood', methods=['GET', 'POST'])
+def most_mood():
+    try:
+        data = request.get_json(silent=True) or {}
+        email = data.get('email') or data.get('Email_ID') or request.args.get('email')
+
+        moods = ["joyful", "happy", "amazed", "depression", "chill", "miserable", "furious", "irritated", "manic", "calm"]
+
+        if not email:
+            return jsonify({'most_mood': 'calm'}), 200
+
+        score_entry = Score.query.filter(func.lower(Score.email) == email.lower()).first()
+        if not score_entry:
+            return jsonify({'most_mood': 'calm'}), 200
+
+        counts = {m: (getattr(score_entry, m, 0) or 0) for m in moods}
+        top_mood = max(counts, key=counts.get) if any(counts.values()) else 'calm'
+        return jsonify({'most_mood': top_mood}), 200
+
+    except Exception as e:
+        print(f"Error in most_mood: {e}")
+        return jsonify({'most_mood': 'calm'}), 200
 
 #---------------------------------------------------------------------------------
 @app.route('/get_angerscale', methods=['GET', 'POST'])
