@@ -116,7 +116,9 @@ class _TouchPointsState extends State<TouchPoints> {
             children: [
               Icon(Icons.info_outline_rounded, color: AppColors.patientPrimary, size: 24),
               SizedBox(width: 10),
-              Text('Minimum Taps Needed', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+              Expanded(
+                child: Text('Minimum Taps Needed', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+              ),
             ],
           ),
           content: Text(
@@ -199,10 +201,11 @@ class _TouchPointsState extends State<TouchPoints> {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           elevation: 10,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
               children: [
                 // Top Celebration Icon
                 Container(
@@ -259,33 +262,36 @@ class _TouchPointsState extends State<TouchPoints> {
                   ),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildDialogStatCard(
-                            label: 'Accuracy',
-                            value: '${accuracy.toStringAsFixed(0)}%',
-                            color: performanceColor,
-                          ),
-                          Container(height: 36, width: 1, color: AppColors.divider),
-                          _buildDialogStatCard(
-                            label: 'Hits',
-                            value: '$accurateTaps',
-                            color: AppColors.patientPrimary,
-                          ),
-                          Container(height: 36, width: 1, color: AppColors.divider),
-                          _buildDialogStatCard(
-                            label: 'Misses',
-                            value: '$misses',
-                            color: const Color(0xFFE56A55),
-                          ),
-                          Container(height: 36, width: 1, color: AppColors.divider),
-                          _buildDialogStatCard(
-                            label: 'Total Taps',
-                            value: '$totalTaps',
-                            color: AppColors.textPrimary,
-                          ),
-                        ],
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildDialogStatCard(
+                              label: 'Accuracy',
+                              value: '${accuracy.toStringAsFixed(0)}%',
+                              color: performanceColor,
+                            ),
+                            Container(height: 36, width: 1, color: AppColors.divider),
+                            _buildDialogStatCard(
+                              label: 'Hits',
+                              value: '$accurateTaps',
+                              color: AppColors.patientPrimary,
+                            ),
+                            Container(height: 36, width: 1, color: AppColors.divider),
+                            _buildDialogStatCard(
+                              label: 'Misses',
+                              value: '$misses',
+                              color: const Color(0xFFE56A55),
+                            ),
+                            Container(height: 36, width: 1, color: AppColors.divider),
+                            _buildDialogStatCard(
+                              label: 'Total Taps',
+                              value: '$totalTaps',
+                              color: AppColors.textPrimary,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -391,7 +397,8 @@ class _TouchPointsState extends State<TouchPoints> {
               ],
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }
@@ -430,10 +437,11 @@ class _TouchPointsState extends State<TouchPoints> {
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   width: 56,
@@ -486,7 +494,8 @@ class _TouchPointsState extends State<TouchPoints> {
               ],
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }

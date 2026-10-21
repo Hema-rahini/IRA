@@ -32,7 +32,7 @@ class _StressQuestionsState extends State<StressQuestions> {
       ),
       body: SafeArea(
         child: Center(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(28.0),
             child: Container(
               padding: const EdgeInsets.all(28),

@@ -191,9 +191,13 @@ class _DoctorHomepageState extends State<DoctorHomepage> {
               children: const [
                 Icon(Icons.search_rounded, color: AppColors.doctorSecondary, size: 22),
                 SizedBox(width: 12.0),
-                Text(
-                  'Search patients by name or email...',
-                  style: TextStyle(color: AppColors.textMuted, fontSize: 15.0),
+                Expanded(
+                  child: Text(
+                    'Search patients by name or email...',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 15.0),
+                  ),
                 ),
               ],
             ),

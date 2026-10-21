@@ -163,11 +163,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       const SnackBar(
                         content: Row(
                           children: [
-                            Icon(Icons.check_circle, color: Colors.white, size: 20),
-                            SizedBox(width: 10),
-                            Text(
-                              'Feedback sent successfully! Thank you.',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                            const Icon(Icons.check_circle, color: Colors.white, size: 20),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                'Feedback sent successfully! Thank you.',
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ],
                         ),

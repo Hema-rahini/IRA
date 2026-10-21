@@ -271,11 +271,12 @@ class _InsightsState extends State<Insights> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 24,
+                            runSpacing: 8,
                             children: [
                               _buildLegendItem('Negative (${negativeCount})', AppColors.negativeRed),
-                              const SizedBox(width: 24),
                               _buildLegendItem('Positive (${positiveCount})', AppColors.positiveGreen),
                             ],
                           ),

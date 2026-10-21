@@ -673,7 +673,9 @@ class _ThirdTabState extends State<ThirdTab> {
                                         children: [
                                           Icon(Icons.check_circle_outline_rounded, color: Colors.white, size: 20),
                                           SizedBox(width: 8),
-                                          Text('Doctor profile updated successfully'),
+                                          Expanded(
+                                            child: Text('Doctor profile updated successfully'),
+                                          ),
                                         ],
                                       ),
                                       backgroundColor: AppColors.positiveGreen,

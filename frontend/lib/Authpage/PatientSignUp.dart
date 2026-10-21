@@ -144,7 +144,9 @@ class _PatientSingPageState extends State<PatientSingPage> {
               children: [
                 Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
                 SizedBox(width: 10),
-                Text('Account created successfully! Please sign in.'),
+                Expanded(
+                  child: Text('Account created successfully! Please sign in.'),
+                ),
               ],
             ),
             backgroundColor: AppColors.positiveGreen,

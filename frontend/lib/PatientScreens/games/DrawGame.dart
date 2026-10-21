@@ -74,7 +74,9 @@ class _DrawGameState extends State<DrawGame> {
           children: [
             Icon(Icons.cleaning_services_rounded, color: AppColors.error, size: 24),
             SizedBox(width: 10),
-            Text('Reset Canvas', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+            Expanded(
+              child: Text('Reset Canvas', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+            ),
           ],
         ),
         content: const Text(
@@ -221,12 +223,17 @@ class _DrawGameState extends State<DrawGame> {
                 children: [
                   Icon(Icons.spa_rounded, size: 14, color: AppColors.patientPrimary.withValues(alpha: 0.8)),
                   const SizedBox(width: 6),
-                  const Text(
-                    'Release tension through raw gestures — no rules or expectations',
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textSecondary,
+                  const Expanded(
+                    child: Text(
+                      'Release tension through raw gestures — no rules or expectations',
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ),
                 ],
@@ -316,9 +323,16 @@ class _DrawGameState extends State<DrawGame> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Row 1: Brush / Eraser & Brush Size Selector & Stats
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.center,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                       // Mode Selector (Brush vs Eraser)
                       Container(
                         padding: const EdgeInsets.all(3),
@@ -451,6 +465,10 @@ class _DrawGameState extends State<DrawGame> {
                         ),
                       ),
                     ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 12),
 

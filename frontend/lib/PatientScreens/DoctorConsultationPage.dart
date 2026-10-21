@@ -118,7 +118,9 @@ class _DoctorConsultationPageState extends State<DoctorConsultationPage> {
           children: [
             Icon(Icons.phone_in_talk_rounded, color: AppColors.patientPrimary),
             SizedBox(width: 10),
-            Text('Contact Clinician', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Expanded(
+              child: Text('Contact Clinician', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            ),
           ],
         ),
         content: Column(
@@ -192,7 +194,9 @@ class _DoctorConsultationPageState extends State<DoctorConsultationPage> {
             children: [
               Icon(Icons.mark_email_read_rounded, color: AppColors.positiveGreen),
               SizedBox(width: 10),
-              Text('Callback Logged', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Expanded(
+                child: Text('Callback Logged', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              ),
             ],
           ),
           content: Text(
